@@ -1,5 +1,5 @@
 
-def plot_roc(features, labels, model, string, path):
+def plot_roc(features, labels, model, y_pred_keras, string, path):
     import os
     import pandas
     from keras import layers, models
@@ -11,8 +11,8 @@ def plot_roc(features, labels, model, string, path):
     from sklearn.metrics import auc
 
     print("... In plot ROC ... ")    
-    
-    y_pred_keras = model.predict(features).ravel()
+
+    #y_pred_keras = model.predict(features).ravel()
     fpr_keras, tpr_keras, thresholds_keras = roc_curve(labels, y_pred_keras)
     auc_keras = auc(fpr_keras, tpr_keras)
 
@@ -27,7 +27,7 @@ def plot_roc(features, labels, model, string, path):
     
     save_path = os.path.join(path,string)
 
-    plt.savefig(save_path)
+    plt.savefig(save_path, dpi=300)
     plt.close()
 
     # pl4 = plt.figure(3)
@@ -75,7 +75,7 @@ def plot_history(hist, string, path):
 
     save_path = os.path.join(path,string)
 
-    plt.savefig(save_path)
+    plt.savefig(save_path, dpi=200)
     plt.close()
 
     print("yuppyyy... HIST is done!!!")
@@ -120,19 +120,57 @@ def plot_probs(y_test, probsonedim, string, path):
 
     plt.figure(1)
 
-    back_grd = [prob for label, prob in zip(y_test,probsonedim) if label==0]
-    target = [prob for label, prob in zip(y_test,probsonedim) if label==1]
+    all_vtx = [prob for label, prob in zip(y_test,probsonedim) if label==0]
+    merged_vtx = [prob for label, prob in zip(y_test,probsonedim) if label==1]
 
-    plt.hist(back_grd, alpha = 0.4, color='b')
-    plt.hist(target, alpha = 0.4, color='r')
+    plt.hist(all_vtx, alpha = 0.4, bins=200, color='b')
+    plt.hist(merged_vtx, alpha = 0.4, bins=200, color='r')
     plt.xlabel("prob")
     plt.ylabel("# vertices")
     plt.title("probs charts")
-    plt.xlim(-0.2, 1.2)
+    plt.xlim(-0.1, 1.1)
+    plt.legend(['all_vtx', 'merged_vtx'], loc=1)
 
     save_path = os.path.join(path,string)
-    plt.savefig(save_path)
+    plt.savefig(save_path, dpi=200)
     plt.close()
+
+    
+    ### probs calculation ###
+    mer_cnt_ye = 0
+    mer_cnt_no = 0
+    for i, value_mer in enumerate(merged_vtx):
+        i += i
+        if value_mer > 0.7:
+            mer_cnt_ye += 1
+        if value_mer < 0.3:
+            mer_cnt_no += 1
+    
+
+    print('found', i, 'merged vertices!!! ', mer_cnt_ye, 'with probability higher than 0.7, and ', mer_cnt_no , 'with probability lower than 0.3')
+
+    nomer_cnt_ye = 0
+    nomer_cnt_no = 0
+    for j, value_nomer in enumerate(all_vtx):
+        j += j
+        if value_nomer > 0.7:
+            nomer_cnt_ye += 1
+        if value_nomer < 0.3:
+            nomer_cnt_no += 1
+    
+
+    print('found', j, 'not merged vertices!!! ', nomer_cnt_ye, 'with probability higher than 0.7, and ', nomer_cnt_no , 'with probability lower than 0.3')
+
+
+
+        # all_vtx_cnt_ye = 0
+        # all_vtx_cnt_no = 0
+        # for j, value_all in enumerate(all_vtx):
+        #     j+= j
+        #     if value_all > 0.7
+
+
+
 
     print("yupyyy...  PROBS is done!!! ")
     
