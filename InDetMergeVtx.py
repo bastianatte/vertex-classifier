@@ -22,6 +22,7 @@ def execute(nSamples,
             test_size,
             path,
             m_name,
+            load_feats,
             models):
     trk_nSamples = 2000000
     print("vertex Samples = ", nSamples, "tracks Samples = ", trk_nSamples)
@@ -31,28 +32,26 @@ def execute(nSamples,
     LAB_VTX = "isMerge"
     DATASET_TRK = ["pt", "eta", "phi", "d0", "z0", "isMerge_trk_2"]
     LAB_TRK = "isMerge_trk_2"
-    # INPUT = path = sys.argv[1]
-    # ROOTFILE = '50K_Merged_Vtx_sample.root'
-    # PATH = os.path.join(INPUT+ROOTFILE)
-    #ROOTFILE = '/home/spinali/lapzhd/Qual_task/Data/50K_Merged_Vtx_sample.root'
     PATH = sys.argv[1]
     mod_rep = 'Models'
     png = '.png'
     json = '.json'
     h5 = '.h5'
     dat = '.dat'
-    print(" ...load vtx data... ")
-    feat_vtx_noResh, lab_vtx_noResh, feat_vtx, lab_vtx = utl.new_load_data(PATH,
-                                                                           DATASET_VTX,
-                                                                           LAB_VTX,
-                                                                           nVtxFeats+1,
-                                                                           nSamples)
-    print(" ...load trk data... ")
-    # feat_trk_noResh, lab_trk_noResh, feat_trk, lab_trk = utl.new_load_data(PATH,
-    #                                                                        DATASET_TRK,
-    #                                                                        LAB_TRK,
-    #                                                                        nTrackFeats+1,
-    #                                                                        trk_nSamples)
+    if (load_feats["vertex"] == 1):
+        print(" ...load vtx data... ")
+        feat_vtx_noResh, lab_vtx_noResh, feat_vtx, lab_vtx = utl.new_load_data(PATH,
+                                                                               DATASET_VTX,
+                                                                               LAB_VTX,
+                                                                               nVtxFeats+1,
+                                                                               nSamples)
+    if (load_feats["tracks"] == 1):
+        print(" ...load trk data... ")
+        feat_trk_noResh, lab_trk_noResh, feat_trk, lab_trk = utl.new_load_data(PATH,
+                                                                               DATASET_TRK,
+                                                                               LAB_TRK,
+                                                                               nTrackFeats+1,
+                                                                               trk_nSamples)
 
     if (models["vertex"] == 1):
         print("########## FIRST MODEL ##########")
@@ -322,44 +321,3 @@ def execute(nSamples,
         print(" ...concatenate() model...  DONE!!!!!!  ")
 
     return None
-
-
-models = {
-    "vertex": 1,
-    "tracks": 0,
-    "vertex_lstm": 0,
-    "tracks_lstm": 0,
-    "conc": 0,
-    "add": 0,
-    "conc_best": 0
-}
-
-
-def main():
-    nSamples = 110000
-    test_size = 20000
-    epochs = 5
-    nFeats = 10
-    nVtxFeats = 9
-    nTrackFeats = 5
-    loss = binary_crossentropy
-    print("loss is : ", loss)
-    epochs_name = '5Epochs'
-    mod_name = '_5Epochs'
-    path = sys.argv[2]
-    if not os.path.exists(path):
-        os.makedirs(path)
-    execute(nSamples,
-            nVtxFeats,
-            nTrackFeats,
-            epochs,
-            loss,
-            epochs_name,
-            test_size,
-            path,
-            mod_name,
-            models)
-    return None
-
-
-main()
