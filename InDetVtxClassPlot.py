@@ -115,7 +115,7 @@ def plot_probs(y_test, probsonedim, string, path):
     save_path = os.path.join(path,string)
     plt.savefig(save_path, dpi=200)
     plt.close()
-    mer_cnt_ye s= 0
+    mer_cnt_yes= 0
     mer_cnt_no = 0
     for i, value_mer in enumerate(merged_vtx):
         i += i
