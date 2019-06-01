@@ -346,7 +346,7 @@ def main():
     epochs_name = '5Epochs'
     mod_name = '_5Epochs'
     #path = '/home/atlas/sspinali/Qual_task/Outputs/binary_crossentropy/10Var/'
-    path = sys.argv[0]
+    path = sys.argv[2]
 
     if not os.path.exists(path):
         os.makedirs(path)
