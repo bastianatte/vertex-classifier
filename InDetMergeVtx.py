@@ -69,8 +69,8 @@ def execute(nSamples,
         vtx_result, vtx_result1D, vtx_result_roc, vtx_probs, vtx_probs1D = utl.prediction(
             out_vtx_mod, x_vtx_test)
         print(" ...plotting vertex model... ")
-        plot.plot_roc(x_vtx_test, y_vtx_test, out_vtx_mod,
-                      vtx_result_roc, vtx_roc_str, plot_path)
+        plot.plot_roc(x_vtx_test, y_vtx_test, vtx_result_roc,
+                      vtx_roc_str, plot_path)
         plot.plot_history(vtx_history, vtx_hst_str, plot_path)
         plot.plot_probs(y_vtx_test, vtx_probs1D, vtx_prob_str, plot_path)
         plot.plot_probs(y_vtx_test, vtx_result1D, vtx_prob_str_1, plot_path)
@@ -95,8 +95,8 @@ def execute(nSamples,
             out_trk_mod, x_trk_test)  # questo e' quello nuovo modificato
         # trk_result, trk_probs, trk_probs1D = utl.prediction(out_trk_mod, x_trk_test)
         print(" ...plotting tracks model... ")
-        plot.plot_roc(x_trk_test, y_trk_test, out_trk_mod,
-                      trk_result_roc, trk_roc_str, plot_path)
+        plot.plot_roc(x_trk_test, y_trk_test,trk_result_roc,
+                      trk_roc_str, plot_path)
         plot.plot_history(trk_history, trk_hst_str, plot_path)
         plot.plot_probs(y_trk_test, trk_probs1D, trk_prob_str, plot_path)
         plot_model(out_vtx_mod, to_file=model_path +
@@ -139,8 +139,8 @@ def execute(nSamples,
         #     file.write(lstm_vtx_mod.to_json())
 
         #### PLOTS #####
-        plot.plot_roc(lstm_x_test_2D, lstm_y_test_2D, lstm_vtx_mod,
-                      lstm_vtx_result_roc, vtx_lstm_roc_str, plot_path)
+        plot.plot_roc(lstm_x_test_2D, lstm_y_test_2D, lstm_vtx_result_roc,
+                      vtx_lstm_roc_str, plot_path)
         plot.plot_history(lstm_vtx_hist, vtx_lstm_hst_str, plot_path)
         plot.plot_probs(lstm_y_test_2D, lstm_vtx_probs1D,
                         vtx_lstm_prob_str, plot_path)
@@ -181,8 +181,8 @@ def execute(nSamples,
         lstm_y_test_2D = utl.threeD_to2D(lstm_trk_y_test, trk_test_size, 1)
 
         ### PLOTS ###
-        plot.plot_roc(lstm_x_test_2D, lstm_y_test_2D, lstm_trk_mod,
-                      lstm_trk_result_roc, trk_lstm_roc_str, plot_path)
+        plot.plot_roc(lstm_x_test_2D, lstm_y_test_2D, lstm_trk_result_roc,
+                      trk_lstm_roc_str, plot_path)
         plot.plot_history(lstm_trk_hist, trk_lstm_hst_str, plot_path)
         plot.plot_probs(lstm_y_test_2D, lstm_trk_probs1D,
                         trk_lstm_prob_str, plot_path)
@@ -210,9 +210,10 @@ def execute(nSamples,
             add_model, add_x_test_vtx, add_x_test_trk)  # need to be checked before using it
 
         plot.plot_conc_history(conc_history, con_hst_str, path)
-        plot.plot_roc(feat_vtx, lab_vtx, out_con_mod,
-                      con_probs_roc, con_roc_vtx_str, path)
-        plot.plot_roc(feat_trk, lab_trk, out_con_mod, con_roc_trk_str, path)
+        plot.plot_roc(feat_vtx, lab_vtx, con_probs_roc,
+                      con_roc_vtx_str, path)
+        plot.plot_roc(feat_trk, lab_trk, out_con_mod, 
+                      con_roc_trk_str, path)
         plot.plot_probs(lab_vtx, con_probs1D, vtx_prob_str, path)
 
         plot_model(out_con_mod, to_file='conc_vtx_trk_model.png')
@@ -258,8 +259,8 @@ def execute(nSamples,
 
         print(" ...new added model plotting ... ")
 
-        plot.plot_roc(added_x_test_2D, added_y_test_2D, add_model,
-                      add_pred_roc, added_roc_str, plot_path)
+        plot.plot_roc(added_x_test_2D, added_y_test_2D, add_pred_roc,
+                      added_roc_str, plot_path)
         plot.plot_history(add_hist, added_hst_str, plot_path)
         plot.plot_probs(added_y_test_2D, add_pred1D, added_prob_str, plot_path)
         plot_model(add_model, to_file=model_path +
@@ -305,8 +306,8 @@ def execute(nSamples,
 
         print(" ...concatenate() model plotting ... ")
 
-        plot.plot_roc(new_conc_x_test_vtx, new_conc_y_test_vtx,
-                      new_conc_model, new_conc_pred_roc, new_conc_roc_str, plot_path)
+        plot.plot_roc(new_conc_x_test_vtx, new_conc_y_test_vtx, new_conc_pred_roc,
+                      new_conc_roc_str, plot_path)
         plot.plot_history(new_conc_hist, new_conc_hst_str, plot_path)
         plot.plot_probs(new_conc_y_test_vtx, new_conc_pred1D,
                         new_conc_prob_str, plot_path)
@@ -333,14 +334,14 @@ models = {
 def main():
     nSamples = 110000
     test_size = 20000
-    epochs = 100
+    epochs = 5
     nFeats = 10
     nVtxFeats = 9
     nTrackFeats = 5
     loss = binary_crossentropy
     print("loss is : ", loss)
-    epochs_name = '100Epochs'
-    mod_name = '_100Epochs'
+    epochs_name = '5Epochs'
+    mod_name = '_5Epochs'
     #path = '/home/atlas/sspinali/Qual_task/Outputs/binary_crossentropy/10Var/'
     path = sys.argv[1]
 
