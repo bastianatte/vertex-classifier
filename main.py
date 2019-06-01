@@ -33,18 +33,10 @@ for e in epochs:
     epoch_str = str(e)
     epochs_name = 'Epochs'
     mod_name = '_Epochs'
-    ep = os.path.join(epoch_str+epochs_name)
-    mer.execute(nSamples,
-                nVtxFeats,
-                nTrackFeats,
-                e,
-                loss,
-                ep,
-                test_size,
-                path,
-                ep,
-                load_feats,
-                models)
+    ep = os.path.join("_"+epoch_str+epochs_name)
+    mer.execute(nSamples, nVtxFeats, nTrackFeats,
+                e, loss, ep, test_size, path,
+                ep, load_feats, models)
 
 
 
