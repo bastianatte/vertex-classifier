@@ -31,10 +31,11 @@ def execute(nSamples,
     LAB_VTX = "isMerge"
     DATASET_TRK = ["pt", "eta", "phi", "d0", "z0", "isMerge_trk_2"]
     LAB_TRK = "isMerge_trk_2"
-    INPUT = path = sys.argv[1]
-    ROOTFILE = '50K_Merged_Vtx_sample.root'
-    PATH = os.path.join(INPUT+ROOTFILE)
+    # INPUT = path = sys.argv[1]
+    # ROOTFILE = '50K_Merged_Vtx_sample.root'
+    # PATH = os.path.join(INPUT+ROOTFILE)
     #ROOTFILE = '/home/spinali/lapzhd/Qual_task/Data/50K_Merged_Vtx_sample.root'
+    PATH = sys.argv[1]
     mod_rep = 'Models'
     png = '.png'
     json = '.json'
@@ -345,12 +346,9 @@ def main():
     print("loss is : ", loss)
     epochs_name = '5Epochs'
     mod_name = '_5Epochs'
-    #path = '/home/atlas/sspinali/Qual_task/Outputs/binary_crossentropy/10Var/'
     path = sys.argv[2]
-
     if not os.path.exists(path):
         os.makedirs(path)
-
     execute(nSamples,
             nVtxFeats,
             nTrackFeats,
@@ -361,7 +359,6 @@ def main():
             path,
             mod_name,
             models)
-
     return None
 
 
