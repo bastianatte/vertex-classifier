@@ -12,8 +12,6 @@ import os
 from keras.losses import logcosh, binary_crossentropy, mean_squared_error,\
     mean_absolute_error
 
-### main method ###
-
 
 def execute(nSamples,
             nVtxFeats,
@@ -25,28 +23,20 @@ def execute(nSamples,
             path,
             m_name,
             models):
-
-    ### Samples size ###
     trk_nSamples = 2000000
     print("vertex Samples = ", nSamples, "tracks Samples = ", trk_nSamples)
     trk_test_size = 500000
-
-    ### DATASET VARIABLES ###
     DATASET_VTX = ["z_pos", "trks", "clos_tp", "sumpt",
                    "W1", "W2", "w4", "w4_d0", "ch_dof", "isMerge"]
     LAB_VTX = "isMerge"
     DATASET_TRK = ["pt", "eta", "phi", "d0", "z0", "isMerge_trk_2"]
     LAB_TRK = "isMerge_trk_2"
     ROOTFILE = '/home/spinali/lapzhd/Qual_task/Data/50K_Merged_Vtx_sample.root'
-
-    ### STRING ###
     mod_rep = 'Models'
     png = '.png'
     json = '.json'
     h5 = '.h5'
     dat = '.dat'
-
-    ### NEW LOAD DATA ###
     print(" ...load vtx data... ")
     feat_vtx_noResh, lab_vtx_noResh, feat_vtx, lab_vtx = utl.new_load_data(ROOTFILE,
                                                                            DATASET_VTX,
@@ -63,12 +53,8 @@ def execute(nSamples,
     if (models["vertex"] == 1):
         print("########## FIRST MODEL ##########")
         print(" ...training vertex model... ")
-
-        ### DIRS ###
         method_dir = 'Vertex_Method'
         plot_path, model_path = utl.create_directories(path, method_dir)
-
-        ### FILES ###
         vrs = 'Roc_vertex_model'
         vhs = 'History_vertex_model'
         vps = 'Probs_vertex_model_predict_proba'
@@ -77,15 +63,11 @@ def execute(nSamples,
         vtx_hst_str = os.path.join(vhs + nEp + png)
         vtx_prob_str = os.path.join(vps + nEp + png)
         vtx_prob_str_1 = os.path.join(vps_1 + nEp + png)
-
-        ### MODEL ###
         vtx_mod = mod.vertex_model(nVtxFeats, loss)
         vtx_history, vtx_scores, x_vtx_test, y_vtx_test, out_vtx_mod = utl.train_model(
             vtx_mod, feat_vtx, lab_vtx, epochs, nEp)
         vtx_result, vtx_result1D, vtx_result_roc, vtx_probs, vtx_probs1D = utl.prediction(
             out_vtx_mod, x_vtx_test)
-
-        ### PLOT ###
         print(" ...plotting vertex model... ")
         plot.plot_roc(x_vtx_test, y_vtx_test, out_vtx_mod,
                       vtx_result_roc, vtx_roc_str, plot_path)
@@ -94,36 +76,24 @@ def execute(nSamples,
         plot.plot_probs(y_vtx_test, vtx_result1D, vtx_prob_str_1, plot_path)
         plot_model(out_vtx_mod, to_file=model_path +
                    '/vertex_model.png', show_shapes=True)
-
         print(" ...vertex model... is DONE!!! ")
-
-    ################################## TRACKS MODEL ######################################
-
     if (models["tracks"] == 1):
         print("########## SECOND MODEL ##########")
         print("training tracks model")
-
-        ### DIRS ###
         method_dir = 'Tracks_Method'
         plot_path, model_path = utl.create_directories(path, method_dir)
-
-        ### FILES ###
         trs = 'Roc_track_model'
         ths = 'History_track_model'
         tps = 'Probs_track_model'
         trk_roc_str = os.path.join(trs + nEp + png)
         trk_hst_str = os.path.join(ths + nEp + png)
         trk_prob_str = os.path.join(tps + nEp + png)
-
-        ### MODEL ###
         trk_mod = mod.tracks_model(nTrackFeats)
         trk_history, trk_scores, x_trk_test, y_trk_test, out_trk_mod = utl.train_model(
             trk_mod, feat_trk, lab_trk, epochs, nEp)
         trk_result, trk_result1D, trk_result_roc, trk_probs, trk_probs1D = utl.prediction(
             out_trk_mod, x_trk_test)  # questo e' quello nuovo modificato
         # trk_result, trk_probs, trk_probs1D = utl.prediction(out_trk_mod, x_trk_test)
-
-        ### PLOTS ###
         print(" ...plotting tracks model... ")
         plot.plot_roc(x_trk_test, y_trk_test, out_trk_mod,
                       trk_result_roc, trk_roc_str, plot_path)
@@ -134,35 +104,24 @@ def execute(nSamples,
 
         print(" ...tracks model... is DONE!!! ")
 
-    #################################### LSTM VERTEX METHOD #####################################
-
     if (models["vertex_lstm"] == 1):
         print("########## THIRD MODEL ##########")
         print("training & plotting lSTM vertex model")
-
-        ### DIRS ###
         method_dir = 'Vertex_LSTM_Method'
         plot_path, model_path = utl.create_directories(path, method_dir)
-
-        ### FILES ###
         vlrs = 'Roc_vertex_lstm_model'
         vlhs = 'History_vertex_lstm_model'
         vlps = 'Prob_vertex_lstm_model'
         vtx_lstm_roc_str = os.path.join(vlrs + nEp + png)
         vtx_lstm_hst_str = os.path.join(vlhs + nEp + png)
         vtx_lstm_prob_str = os.path.join(vlps + nEp + png)
-
-        ### MODEL ###
         lstm_vtx_mod = mod.LSTM_model(nTrackFeats)
         feat_vtx_3D, lab_vtx_3D = utl.twoD_to_3D(
             feat_vtx, lab_vtx, nSamples, 1, 6)
         lstm_vtx_hist, lstm_vtx_scores, lstm_vtx_x_test, lstm_vtx_y_test, lstm_vtx_mod = utl.train_model(
             lstm_vtx_mod, feat_vtx_3D, lab_vtx_3D, epochs, nEp)
-        # lstm_vtx_result, lstm_vtx_probs, lstm_vtx_probs1D = utl.prediction(lstm_vtx_mod, lstm_vtx_x_test, lstm_vtx_y_test)
         lstm_vtx_result, lstm_vtx_result1D, lstm_vtx_result_roc, lstm_vtx_probs, lstm_vtx_probs1D = utl.prediction(
             lstm_vtx_mod, lstm_vtx_x_test)  # modificato, controllare se funziona!!!!
-
-        ### 3D TO 2D ###
         lstm_x_test_2D = utl.threeD_to2D(lstm_vtx_x_test, test_size, 6)
         lstm_y_test_2D = utl.threeD_to2D(lstm_vtx_y_test, test_size, 1)
 
@@ -361,7 +320,7 @@ def execute(nSamples,
 
 
 models = {
-    "vertex": 1
+    "vertex": 1,
     "tracks": 0,
     "vertex_lstm": 0,
     "tracks_lstm": 0,
