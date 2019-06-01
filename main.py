@@ -18,28 +18,33 @@ load_feats = {"vertex": 1, "tracks": 0}
 
 nSamples = 110000
 test_size = 20000
-epochs = 5
+epochs = [100, 120, 160, 180, 200, 220]
 nFeats = 10
 nVtxFeats = 9
 nTrackFeats = 5
 loss = binary_crossentropy
 print("loss is : ", loss)
-epochs_name = '5Epochs'
-mod_name = '_5Epochs'
+epochs_name = 'Epochs'
+mod_name = '_Epochs'
 path = sys.argv[2]
 if not os.path.exists(path):
     os.makedirs(path)
-mer.execute(nSamples,
-            nVtxFeats,
-            nTrackFeats,
-            epochs,
-            loss,
-            epochs_name,
-            test_size,
-            path,
-            mod_name,
-            load_feats,
-            models)
+for e in epochs:
+    epoch_str = str(e)
+    epochs_name = 'Epochs'
+    mod_name = '_Epochs'
+    ep = os.path.join(epoch_str+epochs_name)
+    mer.execute(nSamples,
+                nVtxFeats,
+                nTrackFeats,
+                e,
+                loss,
+                ep,
+                test_size,
+                path,
+                ep,
+                load_feats,
+                models)
 
 
 
