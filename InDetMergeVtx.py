@@ -31,24 +31,27 @@ def execute(nSamples,
     LAB_VTX = "isMerge"
     DATASET_TRK = ["pt", "eta", "phi", "d0", "z0", "isMerge_trk_2"]
     LAB_TRK = "isMerge_trk_2"
-    ROOTFILE = '/home/spinali/lapzhd/Qual_task/Data/50K_Merged_Vtx_sample.root'
+    INPUT = path = sys.argv[1]
+    ROOTFILE = '50K_Merged_Vtx_sample.root'
+    PATH = os.path.join(INPUT+ROOTFILE)
+    #ROOTFILE = '/home/spinali/lapzhd/Qual_task/Data/50K_Merged_Vtx_sample.root'
     mod_rep = 'Models'
     png = '.png'
     json = '.json'
     h5 = '.h5'
     dat = '.dat'
     print(" ...load vtx data... ")
-    feat_vtx_noResh, lab_vtx_noResh, feat_vtx, lab_vtx = utl.new_load_data(ROOTFILE,
+    feat_vtx_noResh, lab_vtx_noResh, feat_vtx, lab_vtx = utl.new_load_data(PATH,
                                                                            DATASET_VTX,
                                                                            LAB_VTX,
                                                                            nVtxFeats+1,
                                                                            nSamples)
     print(" ...load trk data... ")
-    feat_trk_noResh, lab_trk_noResh, feat_trk, lab_trk = utl.new_load_data(ROOTFILE,
-                                                                           DATASET_TRK,
-                                                                           LAB_TRK,
-                                                                           nTrackFeats+1,
-                                                                           trk_nSamples)
+    # feat_trk_noResh, lab_trk_noResh, feat_trk, lab_trk = utl.new_load_data(PATH,
+    #                                                                        DATASET_TRK,
+    #                                                                        LAB_TRK,
+    #                                                                        nTrackFeats+1,
+    #                                                                        trk_nSamples)
 
     if (models["vertex"] == 1):
         print("########## FIRST MODEL ##########")
@@ -327,7 +330,7 @@ models = {
     "tracks_lstm": 0,
     "conc": 0,
     "add": 0,
-    "conc_best": 1
+    "conc_best": 0
 }
 
 
@@ -343,7 +346,7 @@ def main():
     epochs_name = '5Epochs'
     mod_name = '_5Epochs'
     #path = '/home/atlas/sspinali/Qual_task/Outputs/binary_crossentropy/10Var/'
-    path = sys.argv[1]
+    path = sys.argv[0]
 
     if not os.path.exists(path):
         os.makedirs(path)
