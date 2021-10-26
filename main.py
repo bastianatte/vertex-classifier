@@ -18,7 +18,8 @@ load_feats = {"vertex": 1, "tracks": 0}
 
 nSamples = 110000
 test_size = 20000
-epochs = [100, 120, 160, 180, 200, 220]
+#epochs = [100, 120, 160, 180, 200, 220]
+epochs = [10, 15]
 nFeats = 10
 nVtxFeats = 9
 nTrackFeats = 5
