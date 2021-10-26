@@ -1,5 +1,7 @@
 from keras import layers, models
 from keras.models import Sequential
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib import axes
 from sklearn.metrics import roc_curve
